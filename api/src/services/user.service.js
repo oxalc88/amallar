@@ -1,22 +1,22 @@
-const model = require("../models/user.model");
-const { messages } = require("../utils/errorMessage");
-const usermodel = model.UserModel;
+const { UserModel } = require("../models/user.model");
+const { messages } = require("../utils/errorMessages");
+const model = UserModel;
 
 class UserService {
   constructor() {}
   async create(user) {
-    const responseAdd = await usermodel.create(user);
+    const response = await model.create(user);
     return {
       messages: messages.created,
-      data: responseAdd,
+      data: response,
     };
   }
 
   async getAll() {
-    const count = await usermodel.countDocuments({
+    const count = await model.countDocuments({
       deleted: { $exists: false },
     });
-    const response = await usermodel.find({ deleted: null });
+    const response = await model.find({ deleted: null });
     return {
       message: `${messages.count} ${count}`,
       data: response,
@@ -24,17 +24,17 @@ class UserService {
   }
 
   async findOne(id) {
-    const response = await usermodel.findById(id);
+    const response = await model.findById(id);
     return response;
   }
 
   async findByMail(email) {
-    const response = await usermodel.findOne({ email });
+    const response = await model.findOne({ email });
     return response;
   }
 
   async updateOne(id, data) {
-    const response = await usermodel.findByIdAndUpdate(
+    const response = await model.findByIdAndUpdate(
       id,
       { $set: data },
       { new: true }
@@ -46,7 +46,7 @@ class UserService {
   }
 
   async deleteOne(id) {
-    await usermodel.findByIdAndUpdate(
+    await model.findByIdAndUpdate(
       id,
       {
         deleted: Date.now(),

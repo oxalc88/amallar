@@ -1,7 +1,5 @@
 const { Schema, model } = require("mongoose");
 
-const storageSchema = require("./storage.model");
-
 const CashFlowSchema = new Schema(
   {
     description: {
@@ -24,7 +22,11 @@ const CashFlowSchema = new Schema(
         message: `${value} is not a valid saldo`,
       },
     },
-    operationProof: storageSchema,
+    operationProof: {
+      type: Schema.Types.ObjectId,
+      ref: "storage",
+      required: true,
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",

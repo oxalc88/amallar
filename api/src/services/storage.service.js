@@ -1,8 +1,8 @@
-const { AccountModel } = require("../models/accounts.model");
+const { StorageModel } = require("../models/storage.model");
 const { messages } = require("../utils/errorMessages");
-const model = AccountModel;
+const model = StorageModel;
 
-class AccountService {
+class StorageService {
   constructor() {}
   async create(item) {
     const response = await model.create(item);
@@ -54,4 +54,4 @@ class AccountService {
   }
 }
 
-module.exports = { AccountService };
+module.exports = { StorageService };

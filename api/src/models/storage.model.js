@@ -15,4 +15,6 @@ const storageSchema = new Schema(
   }
 );
 
-module.exports = { storageSchema };
+const StorageModel = model("storage", storageSchema);
+
+module.exports = { StorageModel };

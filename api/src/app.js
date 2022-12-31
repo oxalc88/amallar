@@ -17,6 +17,7 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(express.static("storage"));
 
 /* ROUTES */
 app.use("/api", require("./routes"));
