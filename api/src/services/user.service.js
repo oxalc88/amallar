@@ -1,8 +1,9 @@
 const { UserModel } = require("../models/user.model");
 const { messages } = require("../utils/errorMessages");
+const boom = require("@hapi/boom");
 const model = UserModel;
 
-class UserService {
+class UsersService {
   constructor() {}
   async create(user) {
     const response = await model.create(user);
@@ -17,6 +18,7 @@ class UserService {
       deleted: { $exists: false },
     });
     const response = await model.find({ deleted: null });
+    if (!count && !response) throw boom.notFound("There is no users");
     return {
       message: `${messages.count} ${count}`,
       data: response,
@@ -25,6 +27,7 @@ class UserService {
 
   async findOne(id) {
     const response = await model.findById(id);
+    if (!response) throw boom.notFound("User not found");
     return response;
   }
 
@@ -39,6 +42,7 @@ class UserService {
       { $set: data },
       { new: true }
     );
+    if (!response) throw boom.notFound("User not found");
     return {
       message: messages.updated,
       data: response,
@@ -46,17 +50,18 @@ class UserService {
   }
 
   async deleteOne(id) {
-    await model.findByIdAndUpdate(
+    const response = await model.findByIdAndUpdate(
       id,
       {
         deleted: Date.now(),
       },
       { new: true }
     );
+    if (!response) throw boom.notFound("User not found");
     return {
       message: messages.deleted,
     };
   }
 }
 
-module.exports = { UserService };
+module.exports = { UsersService };

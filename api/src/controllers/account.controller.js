@@ -1,7 +1,7 @@
-const { AccountService } = require("../services/accounts.service");
+const { AccountsService } = require("../services/accounts.service");
 const { httpError } = require("../utils/handleError");
 
-const service = new AccountService();
+const service = new AccountsService();
 
 const accountController = {
   getItems: async (req, res) => {

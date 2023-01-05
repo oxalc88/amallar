@@ -8,6 +8,11 @@ const morgan = require("morgan");
 /* LOCAL IMPORTS*/
 const { dbConnect } = require("./config/mongo");
 const config = require("./config/config");
+const {
+  logErrors,
+  errorHandler,
+  boomErrorHandler,
+} = require("./middlewares/errorHandler");
 
 /* INITIALIZATIONS */
 const app = express();
@@ -21,6 +26,11 @@ app.use(express.static("storage"));
 
 /* ROUTES */
 app.use("/api", require("./routes"));
+
+/* errors handler*/
+app.use(logErrors);
+app.use(boomErrorHandler);
+app.use(errorHandler);
 
 /* CONNECTION */
 dbConnect();

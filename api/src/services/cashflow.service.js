@@ -2,7 +2,7 @@ const accountModel = require("../models/accounts.model");
 const { messages } = require("../utils/errorMessages");
 const model = accountModel.AccountModel;
 
-class StorageService {
+class CashflowsServices {
   constructor() {}
   async create(item) {
     const response = await model.create(item);
@@ -12,7 +12,7 @@ class StorageService {
     };
   }
 
-  async getAll() {
+  async find() {
     const count = await model.countDocuments({
       deleted: { $exists: false },
     });
@@ -28,7 +28,7 @@ class StorageService {
     return response;
   }
 
-  async updateOne(id, data) {
+  async update(id, data) {
     const response = await model.findByIdAndUpdate(
       id,
       { $set: data },
@@ -40,7 +40,7 @@ class StorageService {
     };
   }
 
-  async deleteOne(id) {
+  async delete(id) {
     await model.findByIdAndUpdate(
       id,
       {
@@ -54,4 +54,4 @@ class StorageService {
   }
 }
 
-module.exports = { StorageService };
+module.exports = { CashflowsServices };

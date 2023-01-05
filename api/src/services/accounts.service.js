@@ -2,7 +2,7 @@ const { AccountModel } = require("../models/accounts.model");
 const { messages } = require("../utils/errorMessages");
 const model = AccountModel;
 
-class AccountService {
+class AccountsService {
   constructor() {}
   async create(item) {
     const response = await model.create(item);
@@ -54,4 +54,4 @@ class AccountService {
   }
 }
 
-module.exports = { AccountService };
+module.exports = { AccountsService };

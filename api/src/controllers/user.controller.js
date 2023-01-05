@@ -1,10 +1,10 @@
-const { UserService } = require("../services/user.service");
+const { UsersService } = require("../services/user.service");
 const { httpError } = require("../utils/handleError");
 
-const service = new UserService();
+const service = new UsersService();
 
 const userController = {
-  getItems: async (req, res) => {
+  getItems: async (req, res, next) => {
     try {
       const users = await service.getAll();
       res.send(users);
@@ -13,18 +13,19 @@ const userController = {
     }
   },
 
-  getItem: async (req, res) => {
+  getItem: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const item = await service.getOne(id);
+      const item = await service.findOne(id);
       res.status(200);
       res.send(item);
     } catch (e) {
-      httpError(res, e);
+      // httpError(res, e);
+      next(e);
     }
   },
 
-  createItem: async (req, res) => {
+  createItem: async (req, res, next) => {
     try {
       const { username, name, lastname, password, email } = req.body;
       const user = await service.create({
@@ -41,7 +42,7 @@ const userController = {
     }
   },
 
-  updateItem: async (req, res) => {
+  updateItem: async (req, res, next) => {
     try {
       const { id } = req.params;
       const item = req.body;
@@ -52,7 +53,7 @@ const userController = {
     }
   },
 
-  deleteItem: async (req, res) => {
+  deleteItem: async (req, res, next) => {
     try {
       const { id } = req.params;
       const deleted = await service.deleteOne(id);
