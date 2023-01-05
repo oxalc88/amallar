@@ -3,10 +3,11 @@ import Input from "../components/Input";
 import Dropzone from "../components/Dropzone";
 import Text from "../components/Text";
 import Select from "../components/Select";
+import DateSelect from "../components/DatePicker";
 
-const ingreso = () => {
+const nuevoIngreso = () => {
   return (
-    <div className="overflow-auto scroll-smooth m-6 flex flex-col items-center justify-center">
+    <div className="overflow-auto scroll-smooth m-6 flex flex-col items-center justify-center space-y-3">
       <div className="self-end">
         <ExitButton />
       </div>
@@ -37,4 +38,4 @@ const ingreso = () => {
   );
 };
 
-export default ingreso;
+export default nuevoIngreso;

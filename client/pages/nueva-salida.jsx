@@ -5,7 +5,7 @@ import Text from "../components/Text";
 import Select from "../components/Select";
 import DateSelect from "../components/DatePicker";
 
-const ingreso = () => {
+const nuevaSalida = () => {
   return (
     <div className="overflow-auto scroll-smooth m-6 flex flex-col items-center justify-center space-y-3">
       <div className="self-end">
@@ -39,4 +39,4 @@ const ingreso = () => {
   );
 };
 
-export default ingreso;
+export default nuevaSalida;
