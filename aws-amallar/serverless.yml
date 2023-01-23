@@ -1,0 +1,40 @@
+service: aws-amallar
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - arn:aws:dynamodb:us-east-1:532791817056:table/UserTable
+
+functions:
+  hello:
+    handler: src/handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+
+
+resources:
+  Resources:
+    UserTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: UserTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: username
+            KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
