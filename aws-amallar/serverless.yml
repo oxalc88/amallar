@@ -1,16 +1,31 @@
 service: aws-amallar
-frameworkVersion: '3'
+frameworkVersion: "2"
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs14.x
   region: us-east-1
+  apiGateway:
+    binaryMediaTypes:
+      - "multipart/form-data"
+
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:*
+        - "dynamodb:PutItem"
+        - "dynamodb:Get*"
+        - "dynamodb:Scan*"
+        - "dynamodb:UpdateItem"
+        - "dynamodb:DeleteItem"
+        - "s3:*"
       Resource:
-        - arn:aws:dynamodb:us-east-1:532791817056:table/UserTable
+        - arn:aws:dynamodb:us-east-1:532791817056:table/userTable
+        - arn:aws:dynamodb:us-east-1:532791817056:table/${self:service}-cashFlowTable
+    - Effect: Allow
+      Action:
+        - "s3:*"
+      Resource:
+        - arn:aws:s3:::cash-flow-bucket/*
 
 functions:
   hello:
@@ -20,13 +35,19 @@ functions:
           path: /
           method: get
 
+  createCashFlow:
+    handler: src/createCashflow.createCashflow
+    events:
+      - httpApi:
+          path: /cashflow
+          method: post
 
 resources:
   Resources:
     UserTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: UserTable
+        TableName: ${self:service}-userTable
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
@@ -38,3 +59,19 @@ resources:
             KeyType: HASH
           - AttributeName: id
             KeyType: RANGE
+    CashFlowTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:service}-cashFlowTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: primary_key
+            AttributeType: S
+        KeySchema:
+          - AttributeName: primary_key
+            KeyType: HASH
+    cashflowbucket:
+      Type: AWS::S3::Bucket
+      DeletionPolicy: Retain
+      Properties:
+        BucketName: ${self:service}-cash-flow-bucket
